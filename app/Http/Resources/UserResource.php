@@ -7,7 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class JobVacancyResource extends JsonResource
+class UserResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -18,12 +18,8 @@ class JobVacancyResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'title' => $this->title,
-            'description' => $this->description,
-            'creator' => new UserResource(User::find($this->user_id)),
-            'location' => $this->location,
-            'salary' => $this->salary,
-            'created_at' => $this->created_at,
+            'name' => $this->name,
+            'email' => $this->email,
         ];
     }
 }

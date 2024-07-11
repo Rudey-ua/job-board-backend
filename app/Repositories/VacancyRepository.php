@@ -23,7 +23,8 @@ class VacancyRepository
                 'title' => $vacancyData->title,
                 'description' => $vacancyData->description,
                 'location' => $vacancyData->location,
-                'salary' => $vacancyData->salary
+                'salary' => $vacancyData->salary,
+                'user_id' => $vacancyData->userId
             ]);
         } catch (Throwable $e) {
             Log::error('Error while creating vacancy record: ' . $e->getMessage());

@@ -8,6 +8,7 @@ class VacancyData
         public readonly string $title,
         public readonly string $description,
         public readonly string $location,
+        public readonly int $userId,
         public readonly ?int $salary = null,
     ) {
     }
@@ -18,7 +19,8 @@ class VacancyData
             'title' => $this->title,
             'description' => $this->description,
             'location' => $this->location,
-            'salary' => $this->salary
+            'salary' => $this->salary,
+            'user_id' => $this->userId
         ];
     }
 }
