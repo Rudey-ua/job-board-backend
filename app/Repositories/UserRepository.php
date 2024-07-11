@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\DataTransferObjects\UserBalanceData;
 use App\DataTransferObjects\UserData;
 use App\Models\User;
 use Exception;
@@ -11,7 +12,7 @@ use Throwable;
 
 class UserRepository
 {
-    public function __construct(protected User $userModel)
+    public function __construct(protected User $userModel, protected BalanceRepository $balanceRepository)
     {
         //
     }
@@ -20,6 +21,7 @@ class UserRepository
     {
         try {
             $user = $this->createUser($userData);
+            $this->createUserBalance($user);
         } catch (Throwable $e) {
             Log::error('Error while creating user record: ' . $e->getMessage());
             throw new Exception($e->getMessage());
@@ -34,6 +36,16 @@ class UserRepository
             'email' => $userData->email,
             'password' => Hash::make($userData->password),
         ]);
+    }
+
+    private function createUserBalance(User $user): void
+    {
+        $this->balanceRepository->create(
+            new UserBalanceData(
+                userId: $user->id,
+                amount: 20
+            )
+        );
     }
 
     public function getUserByEmail(string $email): ?User

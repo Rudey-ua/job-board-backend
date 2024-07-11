@@ -11,6 +11,7 @@ use App\Repositories\VacancyRepository;
 use Exception;
 use F9Web\ApiResponseHelpers;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Gate;
 
@@ -37,15 +38,17 @@ class JobApplicationController extends Controller
             $vacancy = $this->vacancyRepository->findVacancyById($validated['job_vacancy_id']);
 
             if (!Gate::allows('check-job-vacancy-ownership', $vacancy)) {
-                $application = $this->jobApplicationRepository->create(
-                    new JobApplicationData(
-                        jobVacancyId: $validated['job_vacancy_id'],
-                        userId: Auth::id(),
-                        coverLetter: $validated['cover_letter'] ?? null,
-                        resume: $validated['resume'] ?? null,
-                        status: $validated['status'] ?? 'submitted'
-                    )
-                );
+                $application = DB::transaction(function () use ($validated) {
+                    return $this->jobApplicationRepository->create(
+                        new JobApplicationData(
+                            jobVacancyId: $validated['job_vacancy_id'],
+                            userId: Auth::id(),
+                            coverLetter: $validated['cover_letter'] ?? null,
+                            resume: $validated['resume'] ?? null,
+                            status: $validated['status'] ?? 'submitted'
+                        )
+                    );
+                });
                 return $this->respondCreated([
                     'message' => 'You have successfully submitted your application!',
                     'data' => new JobApplicationResource($application)
@@ -55,7 +58,7 @@ class JobApplicationController extends Controller
 
         } catch (Exception $e) {
             Log::error("Failed to create job application, Error: " . $e->getMessage());
-            return $this->respondError('Failed to apply to this vacation!');
+            return $this->respondError($e->getMessage());
         }
     }
 

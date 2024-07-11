@@ -11,7 +11,7 @@ use Throwable;
 
 class JobApplicationRepository
 {
-    public function __construct(protected JobApplication $jobApplication)
+    public function __construct(protected JobApplication $jobApplication, protected BalanceRepository $balanceRepository)
     {
         //
     }
@@ -30,16 +30,21 @@ class JobApplicationRepository
     public function create(JobApplicationData $jobApplicationData): JobApplication
     {
         try {
-            return $this->jobApplication->create([
+            $application =  $this->jobApplication->create([
                 'job_vacancy_id' => $jobApplicationData->jobVacancyId,
                 'user_id' => $jobApplicationData->userId,
                 'cover_letter' => $jobApplicationData->coverLetter,
                 'resume' => $jobApplicationData->resume,
                 'status' => $jobApplicationData->status
             ]);
+
+            if(!$this->balanceRepository->withdrawAmountFromUserBalance(1, $application->user)) {
+                throw new Exception('Failed to apply to the vacancy due to bad coin amount!');
+            }
         } catch (Throwable $e) {
             Log::error('Error while creating job application record: ' . $e->getMessage());
             throw new Exception($e->getMessage());
         }
+        return $application;
     }
 }

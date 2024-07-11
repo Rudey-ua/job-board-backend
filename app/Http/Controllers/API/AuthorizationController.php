@@ -19,6 +19,7 @@ class AuthorizationController extends Controller
 
     public function __construct(protected UserRepository $userRepository)
     {
+        //
     }
 
     public function register(RegisterRequest $request) : JsonResponse
@@ -33,7 +34,6 @@ class AuthorizationController extends Controller
                     password: $validated['password'],
                 )
             );
-
             $user->assignRole(config('permission.user_roles.member'));
             $token = $user->createToken('auth_token')->plainTextToken;
 
