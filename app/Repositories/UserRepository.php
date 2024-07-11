@@ -11,7 +11,7 @@ use Throwable;
 
 class UserRepository
 {
-    public function __construct(protected readonly User $userModel)
+    public function __construct(protected User $userModel)
     {
         //
     }
