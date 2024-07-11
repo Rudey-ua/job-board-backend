@@ -30,7 +30,7 @@ class UserRepository
     public function createUser(UserData $userData): ?User
     {
         return $this->userModel->create([
-            'firstname' => $userData->name,
+            'name' => $userData->name,
             'email' => $userData->email,
             'password' => Hash::make($userData->password),
         ]);

@@ -28,7 +28,7 @@ class AuthorizationController extends Controller
 
             $user = $this->userRepository->create(
                 new UserData(
-                    name: $validated['firstName'],
+                    name: $validated['name'],
                     email: $validated['email'],
                     password: $validated['password'],
                 )

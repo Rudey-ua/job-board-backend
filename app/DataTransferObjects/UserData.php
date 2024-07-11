@@ -14,7 +14,7 @@ class UserData
     public function toArray(): array
     {
         return [
-            'firstname' => $this->name,
+            'name' => $this->name,
             'email' => $this->email,
             'password' => $this->password
         ];
