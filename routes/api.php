@@ -5,9 +5,6 @@ use App\Http\Controllers\API\JobApplicationController;
 use App\Http\Controllers\API\VacancyController;
 use Illuminate\Support\Facades\Route;
 
-
-//To post a job vacancy, a user has to pay two coins and send a response one coin
-
 Route::controller(AuthorizationController::class)->group(function () {
     Route::post('/auth/register', 'register');
     Route::post('/auth/login', 'login');

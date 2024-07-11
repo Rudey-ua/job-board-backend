@@ -38,6 +38,7 @@ class JobApplicationRepository
                 'status' => $jobApplicationData->status
             ]);
 
+            //To send a response for the job vacancy, a user has to pay one coin
             if(!$this->balanceRepository->withdrawAmountFromUserBalance(1, $application->user)) {
                 throw new Exception('Failed to apply to the vacancy due to bad coin amount!');
             }

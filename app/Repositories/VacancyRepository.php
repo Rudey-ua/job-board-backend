@@ -33,6 +33,7 @@ class VacancyRepository
                 'user_id' => $vacancyData->userId
             ]);
 
+            //To post a job vacancy, a user has to pay two coins
             if(!$this->balanceRepository->withdrawAmountFromUserBalance(2, $vacancy->user)) {
                 throw new Exception('Failed to create new vacancy due to bad coin amount!');
             }
