@@ -17,7 +17,7 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        Gate::define('delete-job-vacancy', function ($user, JobVacancy $jobVacancy) {
+        Gate::define('check-job-vacancy-ownership', function ($user, JobVacancy $jobVacancy) {
             return $jobVacancy->user_id == $user->id;
         });
     }

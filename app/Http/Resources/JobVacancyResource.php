@@ -24,6 +24,7 @@ class JobVacancyResource extends JsonResource
             'location' => $this->location,
             'salary' => $this->salary,
             'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at
         ];
     }
 }

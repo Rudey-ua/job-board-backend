@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\DataTransferObjects\VacancyData;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateVacancyRequest;
+use App\Http\Requests\UpdateVacancyRequest;
 use App\Http\Resources\JobVacancyResource;
 use App\Models\JobVacancy;
 use App\Repositories\VacancyRepository;
@@ -52,17 +53,50 @@ class VacancyController extends Controller
             return $e->getMessage();
         }
 
-        return $this->respondCreated(new JobVacancyResource($vacancy));
+        return $this->respondCreated([
+            'message' => 'Vacancy successfully created!',
+            'data' => new JobVacancyResource($vacancy)
+        ]);
+    }
+
+    public function update(UpdateVacancyRequest $request, int $id)
+    {
+        try {
+            $validated = $request->validated();
+
+            $vacancy = $this->vacancyRepository->findVacancyById($id);
+
+            if (Gate::allows('check-job-vacancy-ownership', $vacancy)) {
+                $this->vacancyRepository->updateVacancy(
+                    new VacancyData(
+                        title: $validated['title'] ?? null,
+                        description: $validated['description'] ?? null,
+                        location: $validated['location'] ?? null,
+                        salary: $validated['salary'] ?? null
+                    ), $vacancy
+                );
+
+                return $this->respondWithSuccess([
+                    'message' => 'Vacancy successfully updated!',
+                    'data' => new JobVacancyResource($vacancy)
+                ]);
+            }
+            return $this->respondForbidden('Permission denied!');
+
+        } catch (Exception $e) {
+            Log::error("Failed to update job-vacancy, Error: " . $e->getMessage());
+            return $e->getMessage();
+        }
     }
 
     public function destroy(int $id)
     {
-        $vacancy = JobVacancy::findOrFail($id);
+        $vacancy = $this->vacancyRepository->findVacancyById($id);
 
-        if (Gate::allows('delete-job-vacancy', $vacancy)) {
+        if (Gate::allows('check-job-vacancy-ownership', $vacancy)) {
             $vacancy->delete();
             return $this->respondNoContent();
         }
-        return $this->respondError('Permission denied!');
+        return $this->respondForbidden('Permission denied!');
     }
 }

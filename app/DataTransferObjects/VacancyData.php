@@ -5,10 +5,10 @@ namespace App\DataTransferObjects;
 class VacancyData
 {
     public function __construct(
-        public readonly string $title,
-        public readonly string $description,
-        public readonly string $location,
-        public readonly int $userId,
+        public readonly ?string $title = null,
+        public readonly ?string $description = null,
+        public readonly ?string $location = null,
+        public readonly ?int $userId = null,
         public readonly ?int $salary = null,
     ) {
     }

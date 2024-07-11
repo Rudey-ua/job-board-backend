@@ -27,4 +27,9 @@ class JobVacancy extends Model
     {
         return Carbon::parse($value)->utc()->format('Y-m-d H:i:s');
     }
+
+    public function getUpdatedAtAttribute($value): string
+    {
+        return Carbon::parse($value)->utc()->format('Y-m-d H:i:s');
+    }
 }

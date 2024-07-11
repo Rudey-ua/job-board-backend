@@ -16,6 +16,11 @@ class VacancyRepository
         //
     }
 
+    public function findVacancyById(int $id): ?JobVacancy
+    {
+        return $this->jobVacancy->findOrFail($id);
+    }
+
     public function create(VacancyData $vacancyData): JobVacancy
     {
         try {
@@ -28,6 +33,21 @@ class VacancyRepository
             ]);
         } catch (Throwable $e) {
             Log::error('Error while creating vacancy record: ' . $e->getMessage());
+            throw new Exception($e->getMessage());
+        }
+    }
+
+    public function updateVacancy(VacancyData $vacancyData, JobVacancy $vacancy): bool
+    {
+        try {
+            return $vacancy->update([
+                'title' => $vacancyData->title ?? $vacancy->title,
+                'description' => $vacancyData->description ?? $vacancy->description,
+                'location' => $vacancyData->location ?? $vacancy->location,
+                'salary' => $vacancyData->salary ?? $vacancy->salary,
+            ]);
+        } catch (Throwable $e) {
+            Log::error('Error while updating vacancy record: ' . $e->getMessage());
             throw new Exception($e->getMessage());
         }
     }
