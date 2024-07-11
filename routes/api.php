@@ -1,14 +1,19 @@
 <?php
 
 use App\Http\Controllers\API\AuthorizationController;
+use App\Http\Controllers\API\JobApplicationController;
 use App\Http\Controllers\API\VacancyController;
 use Illuminate\Support\Facades\Route;
 
 
 /*
  * - A list of job vacancies can be sorted by date of creation and by responses count; the list can be filtered by tags and date of creation (day,week, month)
- * - Only authenticated users can send a job vacancy response.
- * - Responses can be deleted only by their creators.*/
+ * - Responses can be deleted only by their creators.
+ * - A user cannot post more than two job vacancies per 24 hours.
+ * - Users cannot send two or more responses to the same job vacancy.
+ * - To post a job vacancy, a user has to pay two coins and send a response one coin.
+ */
+
 
 Route::controller(AuthorizationController::class)->group(function () {
     Route::post('/auth/register', 'register');
@@ -24,6 +29,11 @@ Route::group(['middleware' => ['auth:sanctum']],  function() {
         Route::patch('/vacancies/{id}', 'update');
         //Only owners can delete their job vacancies (use soft delete)
         Route::delete('/vacancies/{id}', 'destroy');
+    });
+
+    Route::controller(JobApplicationController::class)->group(function () {
+        //Only authenticated users can send a job vacancy response.
+        Route::post('/applications', 'store');
     });
 });
 

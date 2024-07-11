@@ -50,7 +50,7 @@ class VacancyController extends Controller
             );
         } catch (Exception $e) {
             Log::error("Failed to create job-vacancy, Error: " . $e->getMessage());
-            return $e->getMessage();
+            return $this->respondError('Failed to create the job-vacation!');
         }
 
         return $this->respondCreated([
@@ -85,7 +85,7 @@ class VacancyController extends Controller
 
         } catch (Exception $e) {
             Log::error("Failed to update job-vacancy, Error: " . $e->getMessage());
-            return $e->getMessage();
+            return $this->respondError('Failed to update the job-vacation!');
         }
     }
 
