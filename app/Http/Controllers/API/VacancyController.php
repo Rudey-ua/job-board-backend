@@ -4,14 +4,18 @@ namespace App\Http\Controllers\API;
 
 use App\DataTransferObjects\VacancyData;
 use App\Http\Controllers\Controller;
+use App\Http\Filters\SortVacancies;
 use App\Http\Requests\CreateVacancyRequest;
 use App\Http\Requests\UpdateVacancyRequest;
+use App\Http\Requests\VacancyFilterRequest;
 use App\Http\Resources\JobVacancyResource;
 use App\Models\JobVacancy;
 use App\Models\UserBalance;
 use App\Repositories\VacancyRepository;
+use App\Services\VacancyService;
 use Exception;
 use F9Web\ApiResponseHelpers;
+use Illuminate\Pipeline\Pipeline;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -21,16 +25,16 @@ class VacancyController extends Controller
 {
     use ApiResponseHelpers;
 
-    public function __construct(protected VacancyRepository $vacancyRepository)
+    public function __construct(protected VacancyRepository $vacancyRepository, protected VacancyService $vacancyService)
     {
         //
     }
 
     public function index()
     {
-        /*A list of job vacancies can be sorted by date of creation and by responses count;
-        the list can be filtered by tags and date of creation (day,week, month)*/
-        return JobVacancyResource::collection(JobVacancy::paginate(10));
+        $vacancies = $this->vacancyService->getVacancies();
+
+        return JobVacancyResource::collection($vacancies);
     }
 
     public function show(int $id)
