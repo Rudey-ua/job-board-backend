@@ -39,6 +39,10 @@ class VacancyController extends Controller
         try {
             $validated = $request->validated();
 
+            //A user cannot post more than two job vacancies per 24 hours.
+            if ($this->vacancyRepository->checkIfUserAlreadyPostedVacancyToday(Auth::id())) {
+                return $this->respondError('You cannot post more than two job vacancies per 24 hours.');
+            }
             $vacancy = $this->vacancyRepository->create(
                 new VacancyData(
                     title: $validated['title'],

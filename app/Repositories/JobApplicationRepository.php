@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\DataTransferObjects\JobApplicationData;
 use App\Models\JobApplication;
 use Exception;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Throwable;
 
@@ -17,6 +18,13 @@ class JobApplicationRepository
     public function findApplicationById(int $id): ?JobApplication
     {
         return $this->jobApplication->findOrFail($id);
+    }
+
+    public function checkIfUserAlreadyAppliedOnVacancy(int $vacancyId): bool
+    {
+        return JobApplication::where('user_id', Auth::id())
+            ->where('job_vacancy_id', $vacancyId)
+            ->count() > 0;
     }
 
     public function create(JobApplicationData $jobApplicationData): JobApplication

@@ -30,6 +30,10 @@ class JobApplicationController extends Controller
         try {
             $validated = $request->validated();
 
+            // Users cannot send two or more responses to the same job vacancy.
+            if ($this->jobApplicationRepository->checkIfUserAlreadyAppliedOnVacancy($validated['job_vacancy_id'])) {
+                return $this->respondError('You already applied to this vacancy!');
+            }
             $vacancy = $this->vacancyRepository->findVacancyById($validated['job_vacancy_id']);
 
             if (!Gate::allows('check-job-vacancy-ownership', $vacancy)) {

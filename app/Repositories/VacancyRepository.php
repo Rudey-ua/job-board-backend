@@ -4,8 +4,8 @@ namespace App\Repositories;
 
 use App\DataTransferObjects\VacancyData;
 use App\Models\JobVacancy;
-use App\Models\User;
 use Exception;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 use Throwable;
 
@@ -50,5 +50,14 @@ class VacancyRepository
             Log::error('Error while updating vacancy record: ' . $e->getMessage());
             throw new Exception($e->getMessage());
         }
+    }
+
+    public function checkIfUserAlreadyPostedVacancyToday(int $userId): bool
+    {
+        $count = JobVacancy::where('user_id', $userId)
+            ->where('created_at', '>=', Carbon::now()->subDay())
+            ->count();
+
+        return $count > 0;
     }
 }
