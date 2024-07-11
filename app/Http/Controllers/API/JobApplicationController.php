@@ -22,6 +22,7 @@ class JobApplicationController extends Controller
         protected VacancyRepository $vacancyRepository
     )
     {
+        //
     }
 
     public function store(CreateJobApplicationRequest $request)
@@ -52,5 +53,16 @@ class JobApplicationController extends Controller
             Log::error("Failed to create job application, Error: " . $e->getMessage());
             return $this->respondError('Failed to apply to this vacation!');
         }
+    }
+
+    public function destroy(int $id)
+    {
+        $application = $this->jobApplicationRepository->findApplicationById($id);
+
+        if (Gate::allows('check-vacancy-application-ownership', $application)) {
+            $application->delete();
+            return $this->respondNoContent();
+        }
+        return $this->respondForbidden('Permission denied!');
     }
 }
