@@ -3,7 +3,6 @@
 use App\Http\Controllers\API\AuthorizationController;
 use App\Http\Controllers\API\JobApplicationController;
 use App\Http\Controllers\API\VacancyController;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Route;
 
 Route::controller(AuthorizationController::class)->group(function () {
