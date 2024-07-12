@@ -3,6 +3,7 @@
 namespace App\Services;
 
 
+use App\Http\Filters\FilterByTags;
 use App\Http\Filters\SortVacancies;
 use App\Models\JobVacancy;
 use Illuminate\Pipeline\Pipeline;
@@ -10,7 +11,8 @@ use Illuminate\Pipeline\Pipeline;
 class VacancyService
 {
     protected array $filters = [
-        SortVacancies::class
+        SortVacancies::class,
+        FilterByTags::class
     ];
 
     public function getVacancies()
