@@ -3,6 +3,7 @@
 namespace App\Services;
 
 
+use App\Http\Filters\FilterByCreationDate;
 use App\Http\Filters\FilterByTags;
 use App\Http\Filters\SortVacancies;
 use App\Models\JobVacancy;
@@ -12,7 +13,8 @@ class VacancyService
 {
     protected array $filters = [
         SortVacancies::class,
-        FilterByTags::class
+        FilterByTags::class,
+        FilterByCreationDate::class
     ];
 
     public function getVacancies()
