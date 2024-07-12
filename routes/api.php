@@ -38,4 +38,3 @@ Route::controller(VacancyController::class)->group(function () {
 
 
 
-

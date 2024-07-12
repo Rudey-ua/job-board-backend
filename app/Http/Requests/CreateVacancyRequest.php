@@ -22,6 +22,7 @@ class CreateVacancyRequest extends FormRequest
             'description' => 'required|string',
             'location' => 'required|string|max:255',
             'salary' => 'nullable|integer|min:0',
+            'tags.*' => 'nullable|exists:tags,id'
         ];
     }
 }

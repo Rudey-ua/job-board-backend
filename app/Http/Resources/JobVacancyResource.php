@@ -23,6 +23,7 @@ class JobVacancyResource extends JsonResource
             'creator' => new UserResource(User::find($this->user_id)),
             'location' => $this->location,
             'salary' => $this->salary,
+            'tags' => TagResource::collection($this->tags),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at
         ];

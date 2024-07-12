@@ -54,7 +54,8 @@ class VacancyController extends Controller
                         description: $validated['description'],
                         location: $validated['location'],
                         userId: Auth::id(),
-                        salary: $validated['salary']
+                        salary: $validated['salary'],
+                        tags: $validated['tags'] ?? null
                     )
                 );
             });

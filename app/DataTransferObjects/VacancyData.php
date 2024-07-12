@@ -10,6 +10,7 @@ class VacancyData
         public readonly ?string $location = null,
         public readonly ?int $userId = null,
         public readonly ?int $salary = null,
+        public readonly ?array $tags = null
     ) {
     }
 

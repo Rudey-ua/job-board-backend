@@ -33,6 +33,10 @@ class VacancyRepository
                 'user_id' => $vacancyData->userId
             ]);
 
+            if (!empty($vacancyData->tags)) {
+                $this->updateTags($vacancy, $vacancyData->tags);
+            }
+
             //To post a job vacancy, a user has to pay two coins
             if(!$this->balanceRepository->withdrawAmountFromUserBalance(2, $vacancy->user)) {
                 throw new Exception('Failed to create new vacancy due to bad coin amount!');
@@ -43,6 +47,15 @@ class VacancyRepository
             throw new Exception($e->getMessage());
         }
         return $vacancy;
+    }
+
+    protected function updateTags(JobVacancy $jobVacancy, array $tagIds): void
+    {
+        $jobVacancy->tags()->detach();
+
+        foreach ($tagIds as $tagId) {
+            $jobVacancy->tags()->attach($tagId, ['created_at' => now(), 'updated_at' => now()]);
+        }
     }
 
     public function updateVacancy(VacancyData $vacancyData, JobVacancy $vacancy): bool
