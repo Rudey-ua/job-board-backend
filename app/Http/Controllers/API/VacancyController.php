@@ -4,18 +4,14 @@ namespace App\Http\Controllers\API;
 
 use App\DataTransferObjects\VacancyData;
 use App\Http\Controllers\Controller;
-use App\Http\Filters\SortVacancies;
 use App\Http\Requests\CreateVacancyRequest;
 use App\Http\Requests\UpdateVacancyRequest;
-use App\Http\Requests\VacancyFilterRequest;
 use App\Http\Resources\JobVacancyResource;
 use App\Models\JobVacancy;
-use App\Models\UserBalance;
 use App\Repositories\VacancyRepository;
 use App\Services\VacancyService;
 use Exception;
 use F9Web\ApiResponseHelpers;
-use Illuminate\Pipeline\Pipeline;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;

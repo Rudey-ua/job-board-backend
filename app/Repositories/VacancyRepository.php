@@ -66,6 +66,6 @@ class VacancyRepository
             ->where('created_at', '>=', Carbon::now()->subDay())
             ->count();
 
-        return $count > 0;
+        return $count > 1;
     }
 }
