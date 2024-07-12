@@ -17,6 +17,8 @@ return new class extends Migration
             $table->text('description');
             $table->string('location');
             $table->integer('salary')->nullable();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
